@@ -29,7 +29,7 @@ namespace GermanLearningWebsite.Controllers.Words
                 Id = 0,
                 Article = wordVM.Article,
                 IsActiveWord = wordVM.IsActiveWord,
-                LastUse = DateTime.Today,           // LastUse = wordVM.LastUse
+                LastUse = null,
                 TimesRight = 0,
                 TimesUsed = 0,
                 TimesWrong = 0,

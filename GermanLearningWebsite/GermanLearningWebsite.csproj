@@ -151,6 +151,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
+    <Compile Include="Controllers\Words\QuizController.cs" />
     <Compile Include="Controllers\Words\WordsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -170,6 +171,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\QuizVM.cs" />
     <Compile Include="Models\ViewModels\WordsVM.cs" />
     <Compile Include="Models\Words.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
@@ -231,6 +233,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Words\Words.cshtml" />
+    <Content Include="Views\Quiz\Quiz.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

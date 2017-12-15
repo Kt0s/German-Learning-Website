@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="GLWModelStoreContainer" CdmEntityContainer="GLWDB">
+    <EntitySetMapping Name="Words">
+      <EntityTypeMapping TypeName="GLWModel.Words">
+        <MappingFragment StoreEntitySet="Words">
+          <ScalarProperty Name="Translation" ColumnName="Translation" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Word" ColumnName="Word" />
+          <ScalarProperty Name="Article" ColumnName="Article" />
+          <ScalarProperty Name="LastUse" ColumnName="LastUse" />
+          <ScalarProperty Name="TimesUsed" ColumnName="TimesUsed" />
+          <ScalarProperty Name="TimesRight" ColumnName="TimesRight" />
+          <ScalarProperty Name="TimesWrong" ColumnName="TimesWrong" />
+          <ScalarProperty Name="IsActiveWord" ColumnName="IsActiveWord" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

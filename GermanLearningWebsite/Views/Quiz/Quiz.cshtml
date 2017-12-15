@@ -1,0 +1,23 @@
+﻿@model GermanLearningWebsite.Models.ViewModels.QuizVM
+@{
+    ViewBag.Title = "Quiz";
+}
+
+<h2>Quiz</h2>
+<br />
+
+<div class="body-content">
+    @foreach (var word in Model.WordsList)
+    {
+        using (Html.BeginForm("CheckCorrect", "Quiz", FormMethod.Post, new { id = "CheckCorrectForm", @class = "ym-form" }))
+        {
+            @Html.LabelFor(model => model.Article, word.Article)<text> </text>
+            @Html.LabelFor(model => model.Word, word.Word)
+            @Html.TextBoxFor(model => model.Translation, new {placeholder = "Enter translation", @class = "form-control"})
+
+            <br/>
+        }
+    }
+
+
+</div>
