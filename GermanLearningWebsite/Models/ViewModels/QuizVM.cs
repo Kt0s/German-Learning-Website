@@ -7,6 +7,6 @@ namespace GermanLearningWebsite.Models.ViewModels
 {
     public class QuizVM : Words
     {
-        public IEnumerable<Words> WordsList { get; set; }
+        public List<Words> WordsList { get; set; }
     }
 }

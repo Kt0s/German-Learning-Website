@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -33,15 +34,37 @@ namespace GermanLearningWebsite.Controllers.Words
             return resultList;
         }
 
-        public bool CheckCorrect(QuizVM model)
+        private void UpdateWord(int id, bool isRight)
         {
             GLWDB db = new GLWDB();
-            Models.Words dbWords = db.Words.ToList().First(x => x.Id == model.Id);
+            Models.Words dbWord = db.Words.First(x => x.Id == id);
+            dbWord.LastUse = DateTime.Now;
+            dbWord.TimesUsed++;
+            if (isRight)
+                dbWord.TimesRight++;
+            else
+                dbWord.TimesWrong++;
+            
+            db.Words.AddOrUpdate(dbWord);
+            db.SaveChanges();
+        }
+
+        public bool CheckCorrect(int id, string translation)
+        {
+            GLWDB db = new GLWDB();
+            Models.Words dbWords = db.Words
+                .FirstOrDefault(x => x.Id == id && x.Translation.ToLower() == translation.ToLower());
 
             if (dbWords == null)
+            {
+                UpdateWord(id, false);
                 return false;
-
-            return false;
+            }
+            else
+            {
+                UpdateWord(id, true);
+                return true;
+            }
         }
     }
 }

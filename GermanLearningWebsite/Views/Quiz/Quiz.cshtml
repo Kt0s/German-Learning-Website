@@ -7,17 +7,48 @@
 <br />
 
 <div class="body-content">
-    @foreach (var word in Model.WordsList)
+    @for (int index = 0; index < Model.WordsList.Count(); index++)
     {
         using (Html.BeginForm("CheckCorrect", "Quiz", FormMethod.Post, new { id = "CheckCorrectForm", @class = "ym-form" }))
         {
-            @Html.LabelFor(model => model.Article, word.Article)<text> </text>
-            @Html.LabelFor(model => model.Word, word.Word)
-            @Html.TextBoxFor(model => model.Translation, new {placeholder = "Enter translation", @class = "form-control"})
+            if (@Model.WordsList[index].Article != null)
+            {
+                @Html.LabelFor(model => model.Article, @Model.WordsList[index].Article)<text> </text>
+            }
+            @Html.LabelFor(model => model.Word, @Model.WordsList[index].Word)
+            @Html.TextBoxFor(model => model.Translation, new { placeholder = "Enter translation", @class = "form-control", id = "translation_" + @index })
+            <button type="button" class="btn btn-primary" id="btn_@index" onclick="CheckIfCorrect(@index)">Check if correct</button>
 
-            <br/>
+            <input type="hidden" id="wordID_@index" value="@Model.WordsList[index].Id"/>
+            <br />
+            <br />
         }
     }
-
-
 </div>
+
+<script>
+    var CheckIfCorrect = function(index) {
+        var wordId = $('#wordID_' + index).val();
+        var wordTranslation = $('#translation_' + index).val();
+        
+        $.ajax({
+            type: "POST",
+            url: "/Quiz/CheckCorrect",
+            data: {
+                id: wordId,
+                translation: wordTranslation
+            },
+            success: function (response) {
+                if (response === "True") {
+                    $('#translation_' + index).css("backgroundColor", "#008800");
+                    $('#translation_' + index).css("color", "white");
+                    $('#btn_' + index).attr("disabled", true);
+                    $('#btn_' + index).text("You were correct!");
+                } else {
+                    $('#translation_' + index).css("backgroundColor", "#AA0000");
+                    $('#translation_' + index).css("color", "white");
+                }
+            }
+        });
+    };
+</script>
