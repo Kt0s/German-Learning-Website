@@ -1,0 +1,149 @@
+﻿@model GermanLearningWebsite.Models.ViewModels.WordsVM
+
+@{
+    ViewBag.Title = "List of words";
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<div class="body-content">
+    <h2>@ViewBag.Title</h2>
+
+    <div style="margin-bottom: 20px">
+        <a href="#" class="btn btn-success" onclick="ShowAddWordModal()">Add new word</a>
+    </div>
+    <div class="hidden">
+        <input type="hidden" id="deletedWordId" />
+        <input type="hidden" id="deletedWord" />
+    </div>
+
+    <div class="modal fade" id="modalDelete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Confirm action</h3>
+                </div>
+                <div class="modal-body">
+                    <h4>Do you realy want to delete that row?</h4>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default btn-success" onclick="DeleteWord()">Confirm</a>
+                    <a href="#" class="btn btn-default btn-danger" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAdd">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add new word</h3>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("AddWord", "Words", FormMethod.Post, new {id = "AddWordForm", @class = "ym-form"}))
+                    {
+                        <table>
+                            <tr>
+                                <td><label>Article:</label></td>
+                                <td>@Html.EditorFor(model => model.Article)</td>
+                            </tr>
+
+                            <tr>
+                                <td><label>Word:</label></td>
+                                <td>@Html.EditorFor(model => model.Word)</td>
+                            </tr>
+
+                            <tr>
+                                <td><label>Translation:</label></td>
+                                <td>@Html.EditorFor(model => model.Translation)</td>
+                            </tr>
+
+                            <tr>
+                                <td><label>Is active:</label></td>
+                                <td>@Html.EditorFor(model => model.IsActiveWord)</td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default btn-success" onclick="AddWord()">Confirm</a>
+                    <a href="#" class="btn btn-default btn-danger" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>Article</th>
+                <th>Word</th>
+                <th>Translation</th>
+                <th>LastUse</th>
+                <th>TimesUsed</th>
+                <th>TimesRight</th>
+                <th>TimesWrong</th>
+                <th>IsActiveWord</th>
+                <th>Remove?</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var word in Model.WordsList)
+            {
+                <tr id="row_@word.Id">
+                    <td>@(word.Article ?? "---")</td>
+                    <td>@word.Word</td>
+                    <td>@word.Translation</td>
+                    <td>@(word.LastUse == null ? "---" : word.LastUse.ToString())</td>
+                    <td>@(word.TimesUsed == 0 ? "---" : word.TimesUsed.ToString())</td>
+                    <td>@(word.TimesRight == 0 ? "---" : word.TimesRight.ToString())</td>
+                    <td>@(word.TimesWrong == 0 ? "---" : word.TimesWrong.ToString())</td>
+                    <td>@word.IsActiveWord</td>
+                    <td><a href="#" class="btn btn-danger" onclick="ConfirmDelete(@word.Id)">DEL</a></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var ConfirmDelete = function (wordId) {
+        $("#deletedWordId").val(wordId);
+        $("#modalDelete").modal("show");
+    }
+
+    var DeleteWord = function () {
+        var wordId = $("#deletedWordId").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Words/DeleteWord",
+            data: { wordId: wordId },
+            success: function () {
+                $("#modalDelete").modal("hide");
+                $("#row_" + wordId).remove();
+            }
+        });
+    };
+
+    var AddWord = function () {
+
+        var formData = $("#AddWordForm");
+
+        $.ajax({
+            type: "POST",
+            url: "/Words/AddWord",
+            data: formData.serialize(),
+            success: function () {
+                $("#modalAdd").modal("hide");
+            }
+        });
+    };
+
+    var ShowAddWordModal = function () {
+        $("#modalAdd").modal("show");
+    };
+
+</script>
